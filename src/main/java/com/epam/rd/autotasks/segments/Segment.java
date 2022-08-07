@@ -42,10 +42,16 @@ class Segment {
         double low = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
         double t = high / low;
 
-        if (t >= 0 || t <= 1)
-            return null;
+        // if (t >= 0 || t <= 1)
+        //     return null;
 
-        return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
+        // return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
+
+        if ((high>= 0 && high <= 1) && (low >= 0 && low <= 1)) {
+            return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
+        }
+        else
+            return null;
     }
 
 }
