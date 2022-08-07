@@ -5,26 +5,32 @@ import static java.lang.Math.sqrt;
 import static java.lang.StrictMath.pow;
 
 class Segment {
-    Point start;
-    Point end;
 
+    private Point start;
+    private Point end;
+
+   
     public Segment(Point start, Point end) {
-         if (start.getX() == end.getX() && start.getY() == end.getY())
-            throw new RuntimeException();
-        if (start == null || end == null)
-            throw new RuntimeException();
-            
         this.start = start;
         this.end = end;
+        if (length() == 0) {
+            throw new IllegalArgumentException("Segment is degenerative, " +
+                    "which means that start and the  end of the segment is not the same point.");
+        }
     }
 
     double length() {
-        return Math.sqrt(Math.pow(end.getX() - start.getX(), 2)
-                + Math.pow(end.getY() - start.getY(), 2));
+        return sqrt(
+                pow(end.getX() - start.getX(), 2) +
+                pow(end.getY() - start.getY(), 2)
+        );
     }
 
     Point middle() {
-        return new Point((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
+        return new Point(
+                (start.getX() + end.getX())/2,
+                (start.getY() + end.getY())/2
+        );
     }
 
     Point intersection(Segment another) {
@@ -32,27 +38,32 @@ class Segment {
         double x2 = end.getX();
         double x3 = another.start.getX();
         double x4 = another.end.getX();
-
         double y1 = start.getY();
         double y2 = end.getY();
         double y3 = another.start.getY();
         double y4 = another.end.getY();
-
-        double high = (x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4);
-        double low = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-        double t = high / low;
-
-          if ((x1>=x3 && y1>=y3 && x2>=x4))
+        double denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+        double t = ((x1 - x3)*(y3 - y4) - (y1 - y3)*(x3 - x4)) / denominator;
+        double u = ((x1 - x3)*(y1 - y2) - (y1 - y3)*(x1 - x2)) / denominator;
+        if (0 > t || t > 1 || 0 > u || u > 1) {
             return null;
-
-
-        // return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
-
-         if (!(high>= 0 && high <= 1) || !(low >= 0 && low <= 1)) {
-            return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
         }
-        else
+        Point intersection = new Point(
+                x1 + t * (x2 - x1),
+                y1 + t * (y2 - y1));
+        if (Double.valueOf(intersection.getX()).isNaN() &&
+            Double.valueOf(intersection.getY()).isNaN()) {
             return null;
+        }
+        return intersection;
+    }
+
+    public Point getStart() {
+        return start;
+    }
+
+    public Point getEnd() {
+        return end;
     }
 
 }
