@@ -47,7 +47,7 @@ class Segment {
 
         // return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
 
-        if ((high>= 0 && high <= 1) && (low >= 0 && low <= 1)) {
+         if (!(high>= 0 && high <= 1) || !(low >= 0 && low <= 1)) {
             return new Point(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
         }
         else
